@@ -1,0 +1,21 @@
+# Local development
+.env
+.env.*
+*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.log
+
+# Test outputs
+reports/
+scans/

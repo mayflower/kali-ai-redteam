@@ -1,0 +1,26 @@
+# Git
+.git
+.gitignore
+
+# Documentation (will be in image via COPY if needed)
+*.md
+!README.md
+!CLAUDE.md
+
+# Local development
+.env
+.env.*
+*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.log
