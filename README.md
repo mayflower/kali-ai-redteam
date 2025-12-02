@@ -8,14 +8,13 @@ Docker image for AI application security testing with Claude Code.
 # Pull from Docker Hub
 docker pull mayflowergmbh/kali-ai-redteam:latest
 
-# Create and start container
-docker run -d --name ai-redteam \
+# Run interactively (Claude Code starts automatically)
+docker run -it --name ai-redteam \
     -v $(pwd)/reports:/pentest/reports \
     mayflowergmbh/kali-ai-redteam:latest
-
-# Connect to running session
-docker attach ai-redteam
 ```
+
+First run: follow the Claude login URL in your browser to authenticate.
 
 ### Build locally
 
@@ -23,35 +22,28 @@ docker attach ai-redteam
 docker build -t kali-ai-redteam .
 ```
 
-First run: follow the Claude login URL in your browser to authenticate.
+## Container Usage
 
-## Connecting to the Container
-
-**Create the container (once):**
+**Run interactively:**
 ```bash
-docker run -d --name ai-redteam \
+docker run -it --name ai-redteam \
     -v $(pwd)/reports:/pentest/reports \
-    kali-ai-redteam
-```
-
-**Connect to running session:**
-```bash
-docker attach ai-redteam
+    mayflowergmbh/kali-ai-redteam:latest
 ```
 
 **Detach without stopping:** Press `Ctrl+P` then `Ctrl+Q`
 
-**Reconnect after detaching:**
+**Reattach to running container:**
 ```bash
 docker attach ai-redteam
 ```
 
 **With host network access (for testing local targets):**
 ```bash
-docker run -d --name ai-redteam \
+docker run -it --name ai-redteam \
     --network host \
     -v $(pwd)/reports:/pentest/reports \
-    kali-ai-redteam
+    mayflowergmbh/kali-ai-redteam:latest
 ```
 
 **Stop and remove when done:**
@@ -77,15 +69,12 @@ docker exec -it ai-redteam fish
 ## Example Workflow
 
 ```bash
-# 1. Start container
-docker run -d --name ai-redteam -v $(pwd)/reports:/pentest/reports kali-ai-redteam
+# 1. Start container interactively - Claude Code launches automatically
+docker run -it --name ai-redteam -v $(pwd)/reports:/pentest/reports mayflowergmbh/kali-ai-redteam:latest
 
-# 2. Connect - Claude Code starts automatically with --dangerously-skip-permissions
-docker attach ai-redteam
+# 2. Detach with Ctrl+P Ctrl+Q, reattach later with docker attach ai-redteam
 
-# 3. Detach with Ctrl+P Ctrl+Q, reconnect later with docker attach ai-redteam
-
-# 4. Run scans in separate shell while Claude session continues
+# 3. Run scans in separate shell while Claude session continues
 docker exec -it ai-redteam garak --model_type rest --model_name http://target/api --probes promptinject,dan
 ```
 
@@ -101,11 +90,11 @@ docker exec -it ai-redteam garak --model_type rest --model_name http://target/ap
 Pass API keys for testing external LLMs:
 
 ```bash
-docker run -d --name ai-redteam \
+docker run -it --name ai-redteam \
     -e OPENAI_API_KEY="sk-..." \
     -e ANTHROPIC_API_KEY="sk-ant-..." \
     -v $(pwd)/reports:/pentest/reports \
-    kali-ai-redteam
+    mayflowergmbh/kali-ai-redteam:latest
 ```
 
 ## Documentation
