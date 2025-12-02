@@ -38,8 +38,8 @@ ENV PATH="/home/$USERNAME/.claude/local/bin:$PATH"
 # Create default MCP config directory
 RUN mkdir -p /home/$USERNAME/.claude
 
-# Copy MCP server configuration
-COPY --chown=$USERNAME:$USERNAME mcp-config.json /home/$USERNAME/.claude/mcp-servers.json
+# Copy MCP server configuration (user scope)
+COPY --chown=$USERNAME:$USERNAME .mcp.json /home/$USERNAME/.claude/.mcp.json
 
 # Copy Claude Code settings to user home (global settings)
 COPY --chown=$USERNAME:$USERNAME .claude/settings.json /home/$USERNAME/.claude/settings.json
