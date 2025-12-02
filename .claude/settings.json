@@ -5,10 +5,15 @@
       "Bash(promptfoo:*)",
       "Bash(nmap:*)",
       "Bash(curl:*)",
-      "Bash(python*:*)",
-      "Bash(pip*:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(pip:*)",
+      "Bash(pip3:*)",
+      "Bash(pipx:*)",
       "mcp__playwright:*",
-      "mcp__memory:*"
+      "mcp__memory:*",
+      "mcp__filesystem:*",
+      "mcp__fetch:*"
     ]
   }
 }
