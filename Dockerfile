@@ -41,14 +41,18 @@ RUN mkdir -p /home/$USERNAME/.claude
 # Copy MCP server configuration
 COPY --chown=$USERNAME:$USERNAME mcp-config.json /home/$USERNAME/.claude/mcp-servers.json
 
+# Copy Claude Code settings to user home (global settings)
+COPY --chown=$USERNAME:$USERNAME .claude/settings.json /home/$USERNAME/.claude/settings.json
+
+# Copy slash commands and agents to user home (global availability)
+COPY --chown=$USERNAME:$USERNAME .claude/commands /home/$USERNAME/.claude/commands
+COPY --chown=$USERNAME:$USERNAME .claude/agents /home/$USERNAME/.claude/agents
+
 # Set working directory for pentests
 WORKDIR /pentest
 
 # Copy CLAUDE.md instructions for Claude Code
 COPY --chown=$USERNAME:$USERNAME CLAUDE.md /pentest/CLAUDE.md
-
-# Copy Claude Code configuration (slash commands, agents, settings)
-COPY --chown=$USERNAME:$USERNAME .claude /pentest/.claude
 
 # Install Playwright browser for MCP server
 RUN npx playwright install chromium
