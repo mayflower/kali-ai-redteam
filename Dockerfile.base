@@ -1,0 +1,34 @@
+# Base image with kali-linux-headless pre-installed
+# Build once, push to mayflowergmbh/kali-ai-redteam-base:latest
+# Rebuild only when Kali packages need updating
+
+FROM kalilinux/kali-rolling
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install kali-linux-headless metapackage (this is the slow part ~25-35 min)
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y install kali-linux-headless && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install additional dependencies needed by the main image
+RUN apt-get update && \
+    apt-get -y install nodejs npm curl git fish python3-pip python3-venv pipx sudo && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install promptfoo globally
+RUN npm install -g promptfoo
+
+# Install Playwright system dependencies
+RUN npx playwright install-deps chromium
+
+# Install global Python packages
+RUN pip3 install --break-system-packages \
+    adversarial-robustness-toolbox \
+    instructor \
+    httpx \
+    openai \
+    anthropic

@@ -18,9 +18,17 @@ First run: follow the Claude login URL in your browser to authenticate.
 
 ### Build locally
 
+The image uses a two-tier build for faster rebuilds:
+
 ```bash
-docker build -t kali-ai-redteam .
+# Build base image (slow, ~25-35 min - contains kali-linux-headless)
+docker build -f Dockerfile.base -t mayflowergmbh/kali-ai-redteam-base:latest .
+
+# Build main image (fast, ~15 min - uses base image)
+docker build -t mayflowergmbh/kali-ai-redteam:latest .
 ```
+
+For development, only rebuild the main image - the base image rarely needs updating.
 
 ## Container Usage
 
