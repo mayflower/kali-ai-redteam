@@ -48,8 +48,12 @@ COPY --chown=$USERNAME:$USERNAME .claude/settings.json /home/$USERNAME/.claude/s
 COPY --chown=$USERNAME:$USERNAME .claude/commands /home/$USERNAME/.claude/commands
 COPY --chown=$USERNAME:$USERNAME .claude/agents /home/$USERNAME/.claude/agents
 
-# Set working directory for pentests
+# Create and set working directory for pentests with proper ownership
+RUN sudo mkdir -p /pentest && sudo chown $USERNAME:$USERNAME /pentest
 WORKDIR /pentest
+
+# Create output directories
+RUN mkdir -p /pentest/recon /pentest/scans /pentest/prompts /pentest/exploits /pentest/reports
 
 # Copy CLAUDE.md instructions for Claude Code
 COPY --chown=$USERNAME:$USERNAME CLAUDE.md /pentest/CLAUDE.md
