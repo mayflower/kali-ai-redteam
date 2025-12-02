@@ -10,12 +10,11 @@ docker pull mayflowergmbh/kali-ai-redteam:latest
 
 # Run interactively (Claude Code starts automatically)
 docker run -it --name ai-redteam \
-    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
-On first run, MCP servers are automatically configured.
+On first run, follow the login URL to authenticate with Claude Code. MCP servers are configured automatically.
 
 ### Build locally
 
@@ -36,7 +35,6 @@ For development, only rebuild the main image - the base image rarely needs updat
 **Run interactively:**
 ```bash
 docker run -it --name ai-redteam \
-    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
@@ -52,7 +50,6 @@ docker attach ai-redteam
 ```bash
 docker run -it --name ai-redteam \
     --network host \
-    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
@@ -110,9 +107,8 @@ pentest/
 ## Example Workflow
 
 ```bash
-# 1. Start container
+# 1. Start container (login on first run)
 docker run -it --name ai-redteam \
-    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 
@@ -135,15 +131,16 @@ docker run -it --name ai-redteam \
 
 ## Environment Variables
 
-Pass API keys for testing external LLMs:
+Pass API keys for testing external LLM targets (garak, promptfoo):
 
 ```bash
 docker run -it --name ai-redteam \
     -e OPENAI_API_KEY="sk-..." \
-    -e ANTHROPIC_API_KEY="sk-ant-..." \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
+
+Note: Claude Code authentication is handled via browser login on first run, not via environment variables.
 
 ## MCP Servers
 
