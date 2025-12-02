@@ -10,7 +10,7 @@ docker pull mayflowergmbh/kali-ai-redteam:latest
 
 # Run interactively (Claude Code starts automatically)
 docker run -it --name ai-redteam \
-    -v $(pwd)/reports:/pentest/reports \
+    -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
@@ -27,7 +27,7 @@ docker build -t kali-ai-redteam .
 **Run interactively:**
 ```bash
 docker run -it --name ai-redteam \
-    -v $(pwd)/reports:/pentest/reports \
+    -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
@@ -42,7 +42,7 @@ docker attach ai-redteam
 ```bash
 docker run -it --name ai-redteam \
     --network host \
-    -v $(pwd)/reports:/pentest/reports \
+    -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
@@ -56,6 +56,25 @@ docker stop ai-redteam && docker rm ai-redteam
 docker exec -it ai-redteam fish
 ```
 
+## Slash Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/recon` | Enumerate target LLM API/model info | `/recon https://api.target.com` |
+| `/scan` | Run garak/promptfoo vulnerability scans | `/scan openai gpt-4 --probes promptinject,dan` |
+| `/probe` | Quick prompt injection test | `/probe "ignore previous instructions"` |
+| `/jailbreak` | Generate jailbreak payloads | `/jailbreak chatgpt` |
+| `/extract` | System prompt extraction attempts | `/extract https://api.target.com/chat` |
+| `/report` | Generate assessment report | `/report` |
+
+## Autonomous Agents
+
+| Agent | Description |
+|-------|-------------|
+| `scanner` | Systematic vulnerability scanning with garak/promptfoo |
+| `exploiter` | Payload crafting and exploitation testing |
+| `reporter` | Compile findings into assessment reports |
+
 ## Pre-installed Tools
 
 | Tool | Command | Purpose |
@@ -64,18 +83,33 @@ docker exec -it ai-redteam fish
 | promptfoo | `promptfoo redteam run` | Red team evaluation |
 | ART | Python library | Adversarial Robustness Toolbox |
 
-> **Note:** `prompt-security-fuzzer` and `agentic-security` are not included due to Python 3.13 compatibility issues (pandas build failures). Install manually via `pipx` once upstream fixes are available.
+## Output Structure
+
+All findings are saved to `/pentest/` (mounted to host):
+
+```
+pentest/
+├── recon/       # Target reconnaissance
+├── scans/       # Automated scan results
+├── prompts/     # Test prompts and responses
+├── exploits/    # Successful attacks and PoCs
+└── reports/     # Assessment reports
+```
 
 ## Example Workflow
 
 ```bash
-# 1. Start container interactively - Claude Code launches automatically
-docker run -it --name ai-redteam -v $(pwd)/reports:/pentest/reports mayflowergmbh/kali-ai-redteam:latest
+# 1. Start container
+docker run -it --name ai-redteam -v $(pwd)/pentest:/pentest mayflowergmbh/kali-ai-redteam:latest
 
-# 2. Detach with Ctrl+P Ctrl+Q, reattach later with docker attach ai-redteam
+# 2. Use slash commands for guided testing
+/recon https://target-llm.com/api
+/scan rest https://target-llm.com/api --probes promptinject,dan
+/jailbreak target-model
+/report
 
-# 3. Run scans in separate shell while Claude session continues
-docker exec -it ai-redteam garak --model_type rest --model_name http://target/api --probes promptinject,dan
+# 3. Or run autonomous agents
+# (agents will run without confirmation prompts)
 ```
 
 ## Shell Aliases
@@ -93,9 +127,16 @@ Pass API keys for testing external LLMs:
 docker run -it --name ai-redteam \
     -e OPENAI_API_KEY="sk-..." \
     -e ANTHROPIC_API_KEY="sk-ant-..." \
-    -v $(pwd)/reports:/pentest/reports \
+    -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
+
+## MCP Servers
+
+- **filesystem** - Access to /pentest, /tmp, /var/log
+- **fetch** - HTTP requests to target APIs
+- **playwright** - Browser automation for web-based LLM testing
+- **memory** - Persistent storage for findings across sessions
 
 ## Documentation
 
