@@ -35,6 +35,9 @@ RUN pip3 install --break-system-packages \
 # Install promptfoo (Node.js based) globally
 RUN npm install -g promptfoo
 
+# Install Playwright system dependencies (requires root)
+RUN npx playwright install-deps chromium
+
 # Switch to non-root user for remaining setup
 USER $USERNAME
 WORKDIR /home/$USERNAME
@@ -72,6 +75,12 @@ WORKDIR /pentest
 
 # Copy CLAUDE.md instructions for Claude Code
 COPY --chown=$USERNAME:$USERNAME CLAUDE.md /pentest/CLAUDE.md
+
+# Copy Claude Code configuration (slash commands, agents, settings)
+COPY --chown=$USERNAME:$USERNAME .claude /pentest/.claude
+
+# Install Playwright browser for MCP server
+RUN npx playwright install chromium
 
 # Support both auth methods:
 # 1. ANTHROPIC_API_KEY env var at runtime

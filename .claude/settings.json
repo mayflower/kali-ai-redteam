@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(garak:*)",
+      "Bash(promptfoo:*)",
+      "Bash(nmap:*)",
+      "Bash(curl:*)",
+      "Bash(python*:*)",
+      "Bash(pip*:*)",
+      "mcp__playwright:*",
+      "mcp__memory:*"
+    ]
+  }
+}

@@ -7,6 +7,14 @@
     "fetch": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-playwright"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-memory"]
     }
   }
 }
