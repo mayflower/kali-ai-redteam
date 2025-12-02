@@ -10,11 +10,12 @@ docker pull mayflowergmbh/kali-ai-redteam:latest
 
 # Run interactively (Claude Code starts automatically)
 docker run -it --name ai-redteam \
+    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
-First run: follow the Claude login URL in your browser to authenticate.
+On first run, MCP servers are automatically configured.
 
 ### Build locally
 
@@ -35,6 +36,7 @@ For development, only rebuild the main image - the base image rarely needs updat
 **Run interactively:**
 ```bash
 docker run -it --name ai-redteam \
+    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
@@ -50,6 +52,7 @@ docker attach ai-redteam
 ```bash
 docker run -it --name ai-redteam \
     --network host \
+    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
@@ -108,7 +111,10 @@ pentest/
 
 ```bash
 # 1. Start container
-docker run -it --name ai-redteam -v $(pwd)/pentest:/pentest mayflowergmbh/kali-ai-redteam:latest
+docker run -it --name ai-redteam \
+    -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+    -v $(pwd)/pentest:/pentest \
+    mayflowergmbh/kali-ai-redteam:latest
 
 # 2. Use slash commands for guided testing
 /recon https://target-llm.com/api
@@ -140,6 +146,8 @@ docker run -it --name ai-redteam \
 ```
 
 ## MCP Servers
+
+Configured automatically on first run:
 
 - **filesystem** - Access to /pentest, /tmp, /var/log
 - **fetch** - HTTP requests to target APIs
