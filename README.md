@@ -5,13 +5,13 @@ Docker image for AI application security testing with Claude Code.
 ## Quick Start
 
 ```bash
-# Pull from GitHub Container Registry
-docker pull ghcr.io/mayflower/kali-ai-redteam:main
+# Pull from Docker Hub
+docker pull mayflowergmbh/kali-ai-redteam:latest
 
 # Create and start container
 docker run -d --name ai-redteam \
     -v $(pwd)/reports:/pentest/reports \
-    ghcr.io/mayflower/kali-ai-redteam:main
+    mayflowergmbh/kali-ai-redteam:latest
 
 # Connect to running session
 docker attach ai-redteam
