@@ -35,11 +35,11 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 # Add Claude Code to PATH
 ENV PATH="/home/$USERNAME/.claude/local/bin:$PATH"
 
+# Fail fast if the installer or PATH layout changes upstream.
+RUN claude --version
+
 # Create default MCP config directory
 RUN mkdir -p /home/$USERNAME/.claude
-
-# Copy MCP server configuration (user scope)
-COPY --chown=$USERNAME:$USERNAME .mcp.json /home/$USERNAME/.claude/.mcp.json
 
 # Copy Claude Code settings to user home (global settings)
 COPY --chown=$USERNAME:$USERNAME .claude/settings.json /home/$USERNAME/.claude/settings.json
@@ -59,7 +59,7 @@ RUN mkdir -p /pentest/recon /pentest/scans /pentest/prompts /pentest/exploits /p
 COPY --chown=$USERNAME:$USERNAME CLAUDE.md /pentest/CLAUDE.md
 
 # Install Playwright browser for MCP server
-RUN npx playwright install chromium
+RUN npx -y playwright@latest install chromium
 
 # Entrypoint script for flexibility
 COPY --chown=$USERNAME:$USERNAME entrypoint.sh /entrypoint.sh

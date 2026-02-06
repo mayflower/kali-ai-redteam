@@ -6,29 +6,36 @@ FROM kalilinux/kali-rolling
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Make RUN steps fail fast and surface errors in pipelines.
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+
 # Install kali-linux-headless metapackage (this is the slow part ~25-35 min)
 RUN apt-get update && \
-    apt-get -y upgrade && \
+    apt-get -y full-upgrade && \
     apt-get -y install kali-linux-headless && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install additional dependencies needed by the main image
 RUN apt-get update && \
-    apt-get -y install nodejs npm curl git fish python3-pip python3-venv pipx sudo && \
+    apt-get -y install ca-certificates nodejs npm curl git fish python3-pip python3-venv pipx sudo cargo rustc && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install promptfoo globally
-RUN npm install -g promptfoo
+RUN npm install -g promptfoo@latest
 
 # Install Playwright system dependencies
-RUN npx playwright install-deps chromium
+RUN npx -y playwright@latest install-deps chromium
 
-# Install global Python packages
-RUN pip3 install --break-system-packages \
-    adversarial-robustness-toolbox \
-    instructor \
-    httpx \
-    openai \
-    anthropic
+# Install Python libraries in a dedicated venv (avoid mutating distro Python).
+ENV VIRTUAL_ENV=/opt/ai-venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+RUN python3 -m venv "${VIRTUAL_ENV}" && \
+    "${VIRTUAL_ENV}/bin/pip" install --no-cache-dir -U pip setuptools wheel && \
+    "${VIRTUAL_ENV}/bin/pip" install --no-cache-dir -U \
+      adversarial-robustness-toolbox \
+      instructor \
+      httpx \
+      openai \
+      anthropic

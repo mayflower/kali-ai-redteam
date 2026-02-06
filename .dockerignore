@@ -6,6 +6,7 @@
 *.md
 !README.md
 !CLAUDE.md
+!.claude/**/*.md
 
 # Local development
 .env
