@@ -23,6 +23,10 @@ ENV PATH="/home/$USERNAME/.local/bin:$PATH"
 # Use CPU-only torch to avoid ~8GB NVIDIA CUDA dependencies
 RUN pipx install garak --pip-args="--extra-index-url https://download.pytorch.org/whl/cpu"
 
+# Install additional CLI tools + MCP servers in isolated envs.
+RUN pipx install semgrep
+RUN pipx install mcp-server-fetch
+
 # Create fish config directory
 RUN mkdir -p /home/$USERNAME/.config/fish
 
@@ -60,6 +64,9 @@ COPY --chown=$USERNAME:$USERNAME CLAUDE.md /pentest/CLAUDE.md
 
 # Install Playwright browser for MCP server
 RUN npx -y playwright@latest install chromium
+
+# Install Trivy MCP plugin (Trivy is installed in the base image).
+RUN trivy plugin install mcp
 
 # Entrypoint script for flexibility
 COPY --chown=$USERNAME:$USERNAME entrypoint.sh /entrypoint.sh

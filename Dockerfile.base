@@ -18,12 +18,45 @@ RUN apt-get update && \
 
 # Install additional dependencies needed by the main image
 RUN apt-get update && \
-    apt-get -y install ca-certificates nodejs npm curl git fish python3-pip python3-venv pipx sudo cargo rustc && \
+    apt-get -y install \
+      ca-certificates \
+      cargo \
+      crackmapexec \
+      dirsearch \
+      curl \
+      feroxbuster \
+      fish \
+      git \
+      gitleaks \
+      jq \
+      kubectl \
+      kubernetes-helm \
+      naabu \
+      nodejs \
+      npm \
+      nuclei \
+      bloodhound.py \
+      python3-pip \
+      python3-venv \
+      pipx \
+      ripgrep \
+      rustc \
+      subfinder \
+      sudo \
+      syft \
+      trivy \
+      yq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install promptfoo globally
-RUN npm install -g promptfoo@latest
+# Install grype (not packaged in Kali at the moment).
+RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Install promptfoo + MCP servers globally (avoid npx cold-start downloads).
+RUN npm install -g \
+      promptfoo@latest \
+      mcp-server-kubernetes@latest \
+      mcp-server-sqlite@latest
 
 # Install Playwright system dependencies
 RUN npx -y playwright@latest install-deps chromium
