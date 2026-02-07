@@ -22,6 +22,7 @@
       "Bash(dirsearch:*)",
       "Bash(bloodhound-python:*)",
       "Bash(crackmapexec:*)",
+      "Bash(mcp-chat:*)",
       "Bash(jq:*)",
       "Bash(yq:*)",
       "Bash(kubectl:*)",

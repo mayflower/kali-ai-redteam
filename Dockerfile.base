@@ -55,6 +55,7 @@ RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh |
 # Install promptfoo + MCP servers globally (avoid npx cold-start downloads).
 RUN npm install -g \
       promptfoo@latest \
+      mcp-chat@latest \
       mcp-server-kubernetes@latest \
       mcp-server-sqlite@latest
 
