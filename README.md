@@ -1,6 +1,6 @@
 # Kali AI Red Team
 
-Docker image for AI application security testing with Claude Code.
+Headless Kali Linux container for AI application and external security testing with Claude Code.
 
 ## Quick Start
 
@@ -85,11 +85,32 @@ docker exec -it ai-redteam fish
 
 ## Pre-installed Tools
 
-| Tool | Command | Purpose |
-|------|---------|---------|
-| garak | `garak --model_type openai --model_name gpt-4 --probes promptinject` | LLM vulnerability scanner |
-| promptfoo | `promptfoo redteam run` | Red team evaluation |
-| ART | Python library | Adversarial Robustness Toolbox |
+This is a headless container (no GUI). Playwright runs in headless mode with Chromium installed.
+
+LLM / AI appsec:
+- `claude` (Claude Code)
+- `garak`
+- `promptfoo`
+
+Scanning, SAST, secrets, SBOM, vuln triage:
+- `semgrep`
+- `gitleaks`
+- `trivy` (plus `trivy mcp`)
+- `syft` (SBOM)
+- `grype` (vulns from SBOM)
+- `nuclei`
+
+Recon / web / network (Kali baseline + headless):
+- `nmap`, `masscan`, `httpx`, `ffuf`, `amass`, `subfinder`, `naabu`, `feroxbuster`, `dirsearch`, `nikto`, `sqlmap`
+
+AD / Windows tooling (where applicable):
+- `bloodhound-python`, `crackmapexec`, `netexec`, `impacket-*`, `responder`
+
+Kubernetes:
+- `kubectl`, `helm`
+
+MCP debugging (optional):
+- `mcp-chat` (requires `ANTHROPIC_API_KEY`)
 
 ## Output Structure
 
@@ -131,25 +152,36 @@ docker run -it --name ai-redteam \
 
 ## Environment Variables
 
-Pass API keys for testing external LLM targets (garak, promptfoo):
+Pass API keys for testing external LLM targets (garak, promptfoo, optional MCP tools):
 
 ```bash
 docker run -it --name ai-redteam \
+    -e ANTHROPIC_API_KEY="..." \
     -e OPENAI_API_KEY="sk-..." \
     -v $(pwd)/pentest:/pentest \
     mayflowergmbh/kali-ai-redteam:latest
 ```
 
-Note: Claude Code authentication is handled via browser login on first run, not via environment variables.
+Note: Claude Code authentication is handled via browser login on first run. `ANTHROPIC_API_KEY` is still useful for API-driven tooling and `mcp-chat`.
 
 ## MCP Servers
 
 Configured automatically on first run:
 
-- **filesystem** - Access to /pentest, /tmp, /var/log
-- **fetch** - HTTP requests to target APIs
-- **playwright** - Browser automation for web-based LLM testing
-- **memory** - Persistent storage for findings across sessions
+- `filesystem` - Access to `/pentest`, `/tmp`, `/var/log`
+- `fetch` - HTTP requests (via `mcp-server-fetch`)
+- `playwright` - Headless browser automation (Chromium)
+- `memory` - In-session memory MCP
+- `promptfoo` - Promptfoo MCP transport
+- `trivy` - Trivy MCP transport (`trivy mcp`)
+- `semgrep` - Semgrep MCP transport (`semgrep-mcp`)
+- `sqlite` - Local SQLite scratch DB at `/pentest/mcp.sqlite`
+- `kubernetes` - Kubernetes MCP server (uses `kubectl` config inside the container)
+
+To inspect MCP health:
+```bash
+claude mcp list
+```
 
 ## Documentation
 
