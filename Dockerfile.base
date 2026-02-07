@@ -49,8 +49,18 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install grype (not packaged in Kali at the moment).
-RUN curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+# Install grype (use Anchore's install endpoint; more reliable than pulling GitHub release assets directly).
+# Disable with: --build-arg INSTALL_GRYPE=0
+ARG INSTALL_GRYPE=1
+RUN if [ "${INSTALL_GRYPE}" = "1" ]; then \
+      for i in 1 2 3 4 5; do \
+        curl -fsSL https://get.anchore.io/grype | sh -s -- -b /usr/local/bin && break; \
+        echo "grype install failed; retrying (${i}/5)..." >&2; \
+        sleep $((i*10)); \
+      done; \
+      command -v grype; \
+      grype version; \
+    fi
 
 # Install promptfoo + MCP servers globally (avoid npx cold-start downloads).
 RUN npm install -g \
