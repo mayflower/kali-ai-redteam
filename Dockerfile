@@ -53,6 +53,16 @@ COPY --chown=$USERNAME:$USERNAME .claude/settings.json /home/$USERNAME/.claude/s
 COPY --chown=$USERNAME:$USERNAME .claude/commands /home/$USERNAME/.claude/commands
 COPY --chown=$USERNAME:$USERNAME .claude/agents /home/$USERNAME/.claude/agents
 
+# Copy local Claude Code skills into the user profile.
+COPY --chown=$USERNAME:$USERNAME .claude/skills /home/$USERNAME/.claude/skills
+
+# Install community skills (Claude Code skill packs).
+# Default: enabled. Disable with: --build-arg INSTALL_COMMUNITY_SKILLS=0
+ARG INSTALL_COMMUNITY_SKILLS=1
+RUN if [ "${INSTALL_COMMUNITY_SKILLS}" = "1" ]; then \
+      DISABLE_TELEMETRY=1 npx -y skills@latest add https://github.com/trailofbits/skills -g -a claude-code --skill '*' ; \
+    fi
+
 # Create and set working directory for pentests with proper ownership
 RUN sudo mkdir -p /pentest && sudo chown $USERNAME:$USERNAME /pentest
 WORKDIR /pentest

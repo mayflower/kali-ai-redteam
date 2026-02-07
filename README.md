@@ -183,6 +183,15 @@ To inspect MCP health:
 claude mcp list
 ```
 
+## Claude Code Skills
+
+This image ships with a small set of local skills under `.claude/skills/` (copied into `~/.claude/skills`), and also installs the Trail of Bits skill pack (`trailofbits/skills`) during the Docker build.
+
+If you want to disable community skill installation during build:
+```bash
+docker build -t mayflowergmbh/kali-ai-redteam:latest --build-arg INSTALL_COMMUNITY_SKILLS=0 .
+```
+
 ## Documentation
 
 See `CLAUDE.md` inside the container for:
