@@ -1,8 +1,8 @@
-# Build on pre-built base image with kali-linux-headless
-# Base image: mayflowergmbh/kali-ai-redteam-base:latest
-# To rebuild base: docker build -f Dockerfile.base -t mayflowergmbh/kali-ai-redteam-base .
-
-FROM mayflowergmbh/kali-ai-redteam-base:latest
+# Build on pre-built base image with kali-linux-headless.
+# Override in CI if you publish the base image to a different registry:
+#   docker build --build-arg BASE_IMAGE=ghcr.io/org/repo-base:sha-... .
+ARG BASE_IMAGE=mayflowergmbh/kali-ai-redteam-base:latest
+FROM ${BASE_IMAGE}
 
 # Create non-root user
 ARG USERNAME=hacker
