@@ -5,13 +5,13 @@ Headless Kali Linux container for AI application and external security testing w
 ## Quick Start
 
 ```bash
-# Pull from Docker Hub
-docker pull mayflowergmbh/kali-ai-redteam:latest
+# Pull from GHCR
+docker pull ghcr.io/mayflower/kali-ai-redteam:latest
 
 # Run interactively (Claude Code starts automatically)
 docker run -it --name ai-redteam \
     -v $(pwd)/pentest:/pentest \
-    mayflowergmbh/kali-ai-redteam:latest
+    ghcr.io/mayflower/kali-ai-redteam:latest
 ```
 
 On first run, follow the login URL to authenticate with Claude Code. MCP servers are configured automatically.
@@ -22,10 +22,10 @@ The image uses a two-tier build for faster rebuilds:
 
 ```bash
 # Build base image (slow, ~25-35 min - contains kali-linux-headless)
-docker build -f Dockerfile.base -t mayflowergmbh/kali-ai-redteam-base:latest .
+docker build -f Dockerfile.base -t ghcr.io/mayflower/kali-ai-redteam-base:latest .
 
 # Build main image (fast, ~15 min - uses base image)
-docker build -t mayflowergmbh/kali-ai-redteam:latest .
+docker build -t ghcr.io/mayflower/kali-ai-redteam:latest .
 ```
 
 For development, only rebuild the main image - the base image rarely needs updating.
@@ -36,7 +36,7 @@ For development, only rebuild the main image - the base image rarely needs updat
 ```bash
 docker run -it --name ai-redteam \
     -v $(pwd)/pentest:/pentest \
-    mayflowergmbh/kali-ai-redteam:latest
+    ghcr.io/mayflower/kali-ai-redteam:latest
 ```
 
 **Detach without stopping:** Press `Ctrl+P` then `Ctrl+Q`
@@ -51,7 +51,7 @@ docker attach ai-redteam
 docker run -it --name ai-redteam \
     --network host \
     -v $(pwd)/pentest:/pentest \
-    mayflowergmbh/kali-ai-redteam:latest
+    ghcr.io/mayflower/kali-ai-redteam:latest
 ```
 
 **Stop and remove when done:**
@@ -131,7 +131,7 @@ pentest/
 # 1. Start container (login on first run)
 docker run -it --name ai-redteam \
     -v $(pwd)/pentest:/pentest \
-    mayflowergmbh/kali-ai-redteam:latest
+    ghcr.io/mayflower/kali-ai-redteam:latest
 
 # 2. Use slash commands for guided testing
 /recon https://target-llm.com/api
@@ -159,7 +159,7 @@ docker run -it --name ai-redteam \
     -e ANTHROPIC_API_KEY="..." \
     -e OPENAI_API_KEY="sk-..." \
     -v $(pwd)/pentest:/pentest \
-    mayflowergmbh/kali-ai-redteam:latest
+    ghcr.io/mayflower/kali-ai-redteam:latest
 ```
 
 Note: Claude Code authentication is handled via browser login on first run. `ANTHROPIC_API_KEY` is still useful for API-driven tooling and `mcp-chat`.
@@ -189,7 +189,7 @@ This image ships with a small set of local skills under `.claude/skills/` (copie
 
 If you want to disable community skill installation during build:
 ```bash
-docker build -t mayflowergmbh/kali-ai-redteam:latest --build-arg INSTALL_COMMUNITY_SKILLS=0 .
+docker build -t ghcr.io/mayflower/kali-ai-redteam:latest --build-arg INSTALL_COMMUNITY_SKILLS=0 .
 ```
 
 ## Documentation
