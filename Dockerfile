@@ -25,6 +25,7 @@ RUN pipx install garak --pip-args="--extra-index-url https://download.pytorch.or
 
 # Install additional CLI tools + MCP servers in isolated envs.
 RUN pipx install semgrep
+RUN pipx install semgrep-mcp
 RUN pipx install mcp-server-fetch
 
 # Create fish config directory

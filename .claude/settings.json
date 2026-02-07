@@ -33,6 +33,7 @@
       "mcp__sqlite:*",
       "mcp__kubernetes:*",
       "mcp__trivy:*",
+      "mcp__semgrep:*",
       "mcp__promptfoo:*",
       "mcp__filesystem:*",
       "mcp__fetch:*"

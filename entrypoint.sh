@@ -32,6 +32,7 @@ if [ ! -f ~/.claude.json ] || ! grep -q "mcpServers" ~/.claude.json 2>/dev/null;
     # Pentest-oriented additions (headless / CLI-only).
     add_mcp promptfoo promptfoo mcp --transport stdio || true
     add_mcp trivy trivy mcp || true
+    add_mcp semgrep semgrep-mcp --transport stdio || true
     add_mcp sqlite mcp-server-sqlite --db /pentest/mcp.sqlite || true
     add_mcp kubernetes mcp-server-kubernetes || true
     echo "MCP servers configured."
