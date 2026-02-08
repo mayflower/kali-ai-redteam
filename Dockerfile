@@ -63,8 +63,11 @@ RUN if [ "${INSTALL_COMMUNITY_SKILLS}" = "1" ]; then \
       DISABLE_TELEMETRY=1 npx -y skills@latest add https://github.com/trailofbits/skills -g -a claude-code --skill '*' ; \
     fi
 
-# Create and set working directory for pentests with proper ownership
-RUN sudo mkdir -p /pentest && sudo chown $USERNAME:$USERNAME /pentest
+# Create and set working directory for pentests with proper ownership.
+# Don't use sudo in Docker builds: it can fail under BuildKit/QEMU (nosuid).
+USER root
+RUN mkdir -p /pentest && chown $USERNAME:$USERNAME /pentest
+USER $USERNAME
 WORKDIR /pentest
 
 # Create output directories
