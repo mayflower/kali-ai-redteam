@@ -2,7 +2,7 @@
 name: reporter
 description: Autonomous agent for compiling security assessment reports from pentest findings
 tools: Read, Write, Glob, Grep
-model: sonnet
+model: opus
 ---
 
 You are an autonomous security report generator for AI red teaming assessments.

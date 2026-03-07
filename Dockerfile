@@ -34,8 +34,8 @@ RUN mkdir -p /home/$USERNAME/.config/fish
 # Copy fish configuration
 COPY --chown=$USERNAME:$USERNAME config.fish /home/$USERNAME/.config/fish/config.fish
 
-# Install Claude Code
-RUN curl -fsSL https://claude.ai/install.sh | bash
+# Install Claude Code (beta channel for latest features)
+RUN curl -fsSL https://claude.ai/install.sh | bash -s -- --beta
 
 # Add Claude Code to PATH
 ENV PATH="/home/$USERNAME/.claude/local/bin:$PATH"

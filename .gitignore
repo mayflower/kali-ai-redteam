@@ -19,3 +19,7 @@ Thumbs.db
 # Test outputs
 reports/
 scans/
+
+# Local pentest artifacts (generated inside the container)
+pentest/
+audit_prompt.md

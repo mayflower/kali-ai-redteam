@@ -2,7 +2,7 @@
 name: scanner
 description: Autonomous agent for systematic LLM vulnerability scanning using garak and promptfoo
 tools: Bash, Read, Write, Glob, Grep
-model: sonnet
+model: opus
 ---
 
 You are an autonomous LLM vulnerability scanner for AI red teaming assessments.
