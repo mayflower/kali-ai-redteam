@@ -37,9 +37,10 @@ COPY --chown=$USERNAME:$USERNAME config.fish /home/$USERNAME/.config/fish/config
 # Bump to force a fresh Claude Code install (cache bust).
 ARG CLAUDE_REFRESH=2026-04-18
 
-# Install Claude Code (beta channel for latest features)
+# Install Claude Code. The installer accepts only stable|latest|VERSION;
+# use "latest" to track the most recent (pre-release) build.
 RUN echo "claude refresh: ${CLAUDE_REFRESH}" && \
-    curl -fsSL https://claude.ai/install.sh | bash -s -- --beta
+    curl -fsSL https://claude.ai/install.sh | bash -s -- latest
 
 # Add Claude Code to PATH
 ENV PATH="/home/$USERNAME/.claude/local/bin:$PATH"
