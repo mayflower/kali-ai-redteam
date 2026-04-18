@@ -34,8 +34,12 @@ RUN mkdir -p /home/$USERNAME/.config/fish
 # Copy fish configuration
 COPY --chown=$USERNAME:$USERNAME config.fish /home/$USERNAME/.config/fish/config.fish
 
+# Bump to force a fresh Claude Code install (cache bust).
+ARG CLAUDE_REFRESH=2026-04-18
+
 # Install Claude Code (beta channel for latest features)
-RUN curl -fsSL https://claude.ai/install.sh | bash -s -- --beta
+RUN echo "claude refresh: ${CLAUDE_REFRESH}" && \
+    curl -fsSL https://claude.ai/install.sh | bash -s -- --beta
 
 # Add Claude Code to PATH
 ENV PATH="/home/$USERNAME/.claude/local/bin:$PATH"

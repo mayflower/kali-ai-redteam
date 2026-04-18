@@ -9,8 +9,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Make RUN steps fail fast and surface errors in pipelines.
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
+# Bump to force a fresh apt update/upgrade layer (cache bust).
+ARG KALI_REFRESH=2026-04-18
+
 # Install kali-linux-headless metapackage (this is the slow part ~25-35 min)
-RUN apt-get update && \
+RUN echo "kali refresh: ${KALI_REFRESH}" && \
+    apt-get update && \
     apt-get -y full-upgrade && \
     apt-get -y install kali-linux-headless && \
     apt-get clean && \
